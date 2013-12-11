@@ -30,24 +30,22 @@ module Dentaku
       @rules.each { |r| yield r }
     end
 
-    def self.add_rules(new_rules)
+    def self.add_rule(new_rule)
       @rules ||= core_rules
       @funcs ||= {}
-      ## rules need to be added to the beginning of @rules; for precedence?
-      new_rules.reverse.each do | h |
-        name = h[:name].to_sym
+      name = new_rule[:name].to_sym
 
-        @rules.unshift [
-          [
-            TokenMatcher.send(name),
-            t(:open),
-            *pattern(*h[:tokens]),
-            t(:close),
-          ],
-          name
-        ]
-        @funcs[name] = h[:body]
-      end
+      ## rules need to be added to the beginning of @rules; for precedence?
+      @rules.unshift [
+        [
+          TokenMatcher.send(name),
+          t(:open),
+          *pattern(*new_rule[:tokens]),
+          t(:close),
+        ],
+        name
+      ]
+      @funcs[name] = new_rule[:body]
     end
 
     def self.func(name)
