@@ -111,9 +111,13 @@ describe Dentaku::Calculator do
         new_rules = [
           {
             :name => :exp,
-            :tokens => [ [Dentaku::TokenMatcher.send(:exp)] + Dentaku::Rules.pattern(:open, :non_group_star, :comma, :non_group_star, :close), :exp ],
+            :tokens => [ :non_group_star, :comma, :non_group_star ],
             :body => ->(*args) do
-              _, open, mantissa, _, exponent, close = args
+              ## first one is function name
+              ## second one is open parenthesis
+              ## last one is close parenthesis
+              ## all others are commas
+              _, _, mantissa, _, exponent, _ = args
               Dentaku::Token.new(:numeric, (mantissa.value ** exponent.value))
             end
           },

@@ -35,8 +35,18 @@ module Dentaku
       @funcs ||= {}
       ## rules need to be added to the beginning of @rules; for precedence?
       new_rules.reverse.each do | h |
-        @rules.unshift h[:tokens]
-        @funcs[h[:name]] = h[:body]
+        name = h[:name].to_sym
+
+        @rules.unshift [
+          [
+            TokenMatcher.send(name),
+            t(:open),
+            *pattern(*h[:tokens]),
+            t(:close),
+          ],
+          name
+        ]
+        @funcs[name] = h[:body]
       end
     end
 
