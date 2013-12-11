@@ -32,8 +32,17 @@ module Dentaku
 
     def self.add_rules(new_rules)
       @rules ||= core_rules
+      @funcs ||= {}
       ## rules need to be added to the beginning of @rules; for precedence?
-      new_rules.reverse.each { | r | @rules.unshift r }
+      new_rules.reverse.each do | h |
+        @rules.unshift h[:tokens]
+        @funcs[h[:name]] = h[:body]
+      end
+    end
+
+    def self.func(name)
+      @funcs ||= {}
+      @funcs[name]
     end
 
     def self.t(name)
