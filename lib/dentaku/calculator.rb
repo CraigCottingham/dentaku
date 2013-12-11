@@ -13,6 +13,7 @@ module Dentaku
 
     def add_rules(new_rules)
       Rules.add_rules new_rules
+      self
     end
 
     def evaluate(expression, data={})
