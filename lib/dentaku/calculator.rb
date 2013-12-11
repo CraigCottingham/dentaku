@@ -11,8 +11,13 @@ module Dentaku
       clear
     end
 
+    def add_rule(new_rule)
+      Rules.add_rule new_rule
+      self
+    end
+
     def add_rules(new_rules)
-      Rules.add_rules new_rules
+      new_rules.each { | r | Rules.add_rule r }
       self
     end
 
