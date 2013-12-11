@@ -102,34 +102,5 @@ describe Dentaku::Calculator do
       calculator.evaluate('NOT(some_boolean) AND 7 > 5', :some_boolean => true).should be_false
       calculator.evaluate('NOT(some_boolean) OR 7 < 5', :some_boolean => false).should be_true
     end
-
-    describe 'external functions' do
-
-      let(:with_external_funcs) do
-        c = described_class.new
-
-        new_rules = [
-          {
-            :name => :exp,
-            :tokens => [ :non_group_star, :comma, :non_group_star ],
-            :body => ->(*args) do
-              ## first one is function name
-              ## second one is open parenthesis
-              ## last one is close parenthesis
-              ## all others are commas
-              _, _, mantissa, _, exponent, _ = args
-              Dentaku::Token.new(:numeric, (mantissa.value ** exponent.value))
-            end
-          },
-        ]
-
-        c.add_rules new_rules
-      end
-
-      it 'should include EXP' do
-        with_external_funcs.evaluate('EXP(2,3)').should eq(8)
-        with_external_funcs.evaluate('EXP(3,2)').should eq(9)
-      end
-    end
   end
 end
