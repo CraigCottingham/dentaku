@@ -1,4 +1,5 @@
 require 'dentaku/evaluator'
+require 'dentaku/rules'
 require 'dentaku/token'
 require 'dentaku/tokenizer'
 
@@ -8,6 +9,10 @@ module Dentaku
 
     def initialize
       clear
+    end
+
+    def add_rules(new_rules)
+      Rules.add_rules new_rules
     end
 
     def evaluate(expression, data={})
